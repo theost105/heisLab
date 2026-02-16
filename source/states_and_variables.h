@@ -58,4 +58,7 @@ typedef struct {
 
 } elevator ;
 
+
+
+void update_button_variables(elevator *elevator)
 void recieve_elevator_variables(elevator *elevator)
