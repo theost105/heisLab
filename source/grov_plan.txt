@@ -1,0 +1,57 @@
+
+Main(){
+While{
+	
+	UpdateTilstanderVariabler()
+	VisRiktigLys()
+	GjørRiktigMotorTing()
+	
+	
+	
+
+}
+
+}
+
+
+VisRiktigLys()
+
+If (currentstate == kjøreTilMål) {
+	Kode som viser riktig lys i denne 
+	tilstanden
+}
+If (currentstate == stopp) {
+	Kode som viser riktig lys i denne tilstanden
+}
+…
+
+UpdateTilstanderVariabler(){
+	OppdaterKnapperVariabler()
+	OppdaterSensorVariabler() #motor sensor
+	FiksKøssystem() #oppdaterer neste etasje mål, og noen andre. Tar høyde for rettning
+}
+
+
+GjørRiktigMotorTing(){
+If (currentstate == kjøreTilMål) {
+	Kode som viser riktig lys i denne 
+	Tilstanden
+	#koden bruker også noen ekstra variabler fa tilstands_filen.
+	#feks bruks variabler som posisjon, etasje, neste ettasjer.
+#oppdater variabler. 
+}
+If (currentstate == stopp) {
+	Kode som viser riktig lys i denne tilstanden
+}
+
+
+}
+
+
+FILER:
+tilstander_og_variabler # holde styr på tilstander og mikrotilstander
+knapper_sensorer # oppdater variabler i tilstanderOgVariabler og definerer diverse structs (lys, knapper, sensorer)
+motor # tolker tilstanderOgVariabler og styrer motor
+lys # tolker tilstanderOgVariabler  og styrer lys
+kosystem #oppdater kø og gir ønsket etasje til tilstanderOgVariabler 
+
