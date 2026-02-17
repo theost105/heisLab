@@ -2,6 +2,7 @@
 void update_button_variables(elevator *elevator){
     elevator->sensor_obstruction = elevio_obstruction();
     elevator->sensor_stop_button = elevio_stopButton();
+
     
 }
 
