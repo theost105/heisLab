@@ -4,8 +4,9 @@
 #include <time.h>
 #include "driver/elevio.h"
 
+#include "states_and_variables.h"
 
-
+/*
 int main(){
     elevio_init();
     
@@ -48,4 +49,31 @@ int main(){
     }
 
     return 0;
+}
+*/
+
+int main(){
+    elevio_init();
+    printf("=== Emil and Theo's elevator program ===\n");
+    printf("Press the stop button on the elevator panel to exit\n");
+
+    elevator elevator;
+    init_elevator(&elevator); //initialize
+
+
+    while(1){
+        recieve_elevator_data(&elevator);
+        calculate_elevator_data(&elevator);
+        send_elevator_data(&elevator);
+
+
+        //Elevator stop safeguard
+        if(elevio_stopButton()){
+            elevio_motorDirection(DIRN_STOP);
+            break;
+        }
+
+    }
+        
+
 }

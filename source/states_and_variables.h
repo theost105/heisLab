@@ -1,8 +1,14 @@
-#include "driver/elvio.h"
-#include "lights.h"
+#pragma once
 
-typedef enum floor{
-    first, second, third, fourth} floor;
+#include "driver/elevio.h"
+#include "lights.h"
+#include "buttons_and_sensors.h"
+
+typedef enum  {
+    WAIT = 0,
+    TRANSIT = 1,
+    INITIALIZING = 2
+} primary_state;
 
 
 
@@ -10,39 +16,38 @@ typedef enum floor{
 //These variables should always be synced to the elevator
 //elevator struct
 typedef struct { 
+    //------------main state-----------
+    primary_state primary_state; 
 
     //------------lights----------------- 
-    int lights_indoor_floor[4]; // 1 = true, 0 = false
+    int lights_indoor_floor[N_FLOORS + 1]; // 1 = true, 0 = false
     int lights_indoor_door_open;
     int lights_stop;
 
-    int lights_outdoor_floor[4]; // only one of these should be active
+    int lights_outdoor_floor[N_FLOORS + 1]; // only one of these should be active
     
     //outdoor light buttons
-    int lights_outdoor_button_down_4;
-    int lights_outdoor_button_down_3;
-    int lights_outdoor_button_down_2;
-    
-    int lights_outdoor_button_up_3;
-    int lights_outdoor_button_up_2;
-    int lights_outdoor_button_up_1;
+    int lights_outdoor_button[N_FLOORS + 1][2]; // floor, (up, down). 
+        //lights_outdoor[1][0] = 1 says floor 1, up button light is active
+        //lights_outdoor[4][1] = 1 says floor 4, down button light is active
+        //invalid buttons should have the value -1
     
     //-------------Sensors--------------
-    floor last_floor_detected; //enum 1 , 2, 3, 4, -1 (mellom ettasje)
-
-    int sensor_indoor_order_floor_button[4]; 
+    int sensor_floor_detected; // eg 1 , 2, 3, 4, -1 (between floors)
+    int last_floor_detected; // only valid targets: 1, 2, 3, 4...
 
     int sensor_obstruction;
+
+    //buttons
     int sensor_stop_button;
+
+    int sensor_indoor_order_floor_button[N_FLOORS + 1]; //sensor_indoor_order_floor_button[1] is floor 1
+
+    int sensor_outdoor_button[N_FLOORS + 1][2]; // floor, (up, down). 
+        //sensor_outdoor[1][0] = 1 says floor 1, up button is active
+        //sensor_outdoor[4][1] = 1 says floor 4, down button is active
+        //invalid buttons should have the value -1
     
-    //outdoor buttons
-    int sensor_outdoor_button_down_4; // 1 = true, 0 = false
-    int sensor_outdoor_button_down_3;
-    int sensor_outdoor_button_down_2;
-    
-    int sensor_outdoor_button_up_3;
-    int sensor_outdoor_button_up_2;
-    int sensor_outdoor_button_up_1;
 
     //---------motor------------
     //primary states motor
@@ -55,10 +60,21 @@ typedef struct {
     //------------other-------------------
     int timer;
 
+    
 
 } elevator ;
 
 
 
-void update_button_variables(elevator *elevator)
-void recieve_elevator_variables(elevator *elevator)
+
+
+void recieve_elevator_data(elevator *elevator);
+//Collects all new data sent from the elavator
+
+void calculate_elevator_data(elevator *elevator);
+//use the data to do necessary calulations.
+
+void send_elevator_data(elevator *elevator);
+//sends back instructions to the physical elevator
+
+void init_elevator(elevator *elevator);
