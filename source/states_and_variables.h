@@ -1,17 +1,19 @@
 #pragma once
-
+>
 #include "driver/elevio.h"
 #include "lights.h"
 #include "buttons_and_sensors.h"
 
 
-constexpr int timer_sleep_timestep = 20 * 1000*1000; //20ms
-constexpr int timer_wait_time = 3 * 1000 * 1000 *1000; //3s
+
+const unsigned sleep_timestep = 20 ; //20ms ----NEED TO MULTIPLY BY 10^6 in nano sleep----
+const unsigned int wait_time = 3 * 1000 ; //3s 
+//This is to avoid integer overflow
 
 typedef enum  { // We need idle to differentiate Transit wait and idle 
-    WAIT = 0, //vente med åpnedører 3 sek
+    WAIT = 0, //Wait with opendoors 3 sec
     TRANSIT = 1,
-    IDLE = 2, //Chille/ikke gjøre noe før bestilling
+    IDLE = 2, //Stay idle when no commands are present
     INITIALIZING = 3
 } primary_state;
 
