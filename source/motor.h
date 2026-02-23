@@ -4,3 +4,6 @@
 void calculate_motor_data(elevator *elevator);
 
 void send_motor_data(elevator *elevator);
+
+
+

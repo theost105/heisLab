@@ -4,10 +4,11 @@
 #include "lights.h"
 #include "buttons_and_sensors.h"
 
-typedef enum  {
-    WAIT = 0,
+typedef enum  { // We need idle to differentiate Transit wait and idle 
+    WAIT = 0, //vente med åpnedører 3 sek
     TRANSIT = 1,
-    INITIALIZING = 2
+    IDLE = 2, //Chille/ikke gjøre noe før bestilling
+    INITIALIZING = 3;
 } primary_state;
 
 
@@ -17,7 +18,7 @@ typedef enum  {
 //elevator struct
 typedef struct { 
     //------------main state-----------
-    primary_state primary_state; 
+    primary_state elevator_state; 
 
     //------------lights----------------- 
     int lights_indoor_floor[N_FLOORS + 1]; // 1 = true, 0 = false
@@ -78,3 +79,5 @@ void send_elevator_data(elevator *elevator);
 //sends back instructions to the physical elevator
 
 void init_elevator(elevator *elevator);
+
+void calculate_primary_elevator_state(elevator *elevator);

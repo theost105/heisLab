@@ -8,6 +8,7 @@ void recieve_elevator_data(elevator *elevator) {
 
 void calculate_elevator_data(elevator *elevator){
     calculate_queue_data(elevator);
+    calculate_primary_state(elevator);
     //maybe we need to add a calculate primary_state data. 
     //Or maybe that variable is directly calculated in calculate_motor_data(..)
     calculate_motor_data(elevator);
@@ -25,4 +26,36 @@ void init_elevator(elevator *elevator){
     elevator->timer = 0;
     elevator->queue_next_floor_target = -1; //set an invalid target
     elevator->primary_state = INITIALIZING; //unsure about this.
+}
+
+
+void calculate_primary_elevator_state(elevator *elevator){
+
+        //besttemer elevator_state
+
+state_variables_lights_and_motor
+
+-> send_motor_Data 
+-> send_light_data 
+
+
+
+
+switch 
+
+switch elevator_state{
+
+    case Wait:
+    if timer == 3s and obstruction == 0:
+
+    else:
+        dooropen = true
+        timer += 20 ms
+
+    
+    else:
+        last_floor
+        motor_dir = up 
+}
+
 }
