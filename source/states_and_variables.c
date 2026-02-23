@@ -25,7 +25,25 @@ void init_elevator(elevator *elevator){
     elevator->motor_direction = 0;
     elevator->timer = 0;
     elevator->queue_next_floor_target = -1; //set an invalid target
-    elevator->elevator_state = INITIALIZING; //unsure about this.
+    elevator->elevator_state = INITIALIZING; 
+    elevator->stop_between_floors = NOT_DETECTED;
+}
+
+void detect_stop(elevator *elevator){
+    if (elevator->sensor_stop_button == 1 && elevator->elevator_state != STOP){
+        if (elevator->sensor_floor_detected == -1){
+            if (elevator->motor_direction == DIRN_UP){
+                elevator->stop_between_floors = OVER;
+            }
+            if (elevator->motor_direction == DIRN_DOWN){
+                elevator->stop_between_floors = UNDER;
+            }
+        }else{
+            elevator->stop_between_floors = NOT_DETECTED;
+        }
+        
+        elevator->elevator_state = STOP;
+    }
 }
 
 
@@ -43,7 +61,7 @@ void calculate_primary_elevator_state(elevator *elevator){
         break;
 
     case TRANSIT:
-        if (elevator->sensor_floor_detected == elevator->queue_next_floor_target){
+        if (elevator->sensor_floor_detected == elevator->queue_next_floor_target && elevator->stop_between_floors == NOT_DETECTED){
             elevator->elevator_state = WAIT;
         }
         break;
@@ -58,6 +76,23 @@ void calculate_primary_elevator_state(elevator *elevator){
         if (elevator->sensor_floor_detected != -1){
             elevator->elevator_state = IDLE;
         }
-        break;    
+        break;
+
+    case STOP:
+        if (elevator->sensor_stop_button == 0){
+            switch (elevator->stop_between_floors)
+            {
+            case NOT_DETECTED:
+                elevator->elevator_state = WAIT;
+                break;
+            
+            default:
+                elevator->elevator_state = IDLE;
+                break;
+            }
+        }
+
+        break;
     }
+    
 }

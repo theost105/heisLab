@@ -2,8 +2,36 @@
 
 
 void calculate_lights_data(elevator *elevator){
+    //Defaults:
+    elevator->lights_indoor_door_open = 0;
+    elevator->lights_stop = 0;
     
 
+
+    switch (elevator->elevator_state)
+    {
+    case WAIT:
+        elevator->lights_indoor_door_open = 1;
+        break;
+    
+    case TRANSIT:
+        /* code */
+        break;
+    
+    case IDLE:
+        /* code */
+        break;
+    
+    case INITIALIZING:
+        /* code */
+        break;
+    
+    case STOP:
+        elevator->lights_stop = 1;
+        break;
+    }
+    
+    //queue light logic. Order buttons etc:
 
 
 }

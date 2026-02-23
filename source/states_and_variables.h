@@ -1,5 +1,4 @@
-#pragma once
->
+
 #include "driver/elevio.h"
 #include "lights.h"
 #include "buttons_and_sensors.h"
@@ -14,17 +13,22 @@ typedef enum  { // We need idle to differentiate Transit wait and idle
     WAIT = 0, //Wait with opendoors 3 sec
     TRANSIT = 1,
     IDLE = 2, //Stay idle when no commands are present
-    INITIALIZING = 3
-} primary_state;
+    INITIALIZING = 3,
+    STOP = 4
+} Primary_state;
 
-
+typedef enum { //To determin where the elevator is incase of emergency stop
+    NOT_DETECTED = 0,
+    UNDER = 1,
+    OVER = 2
+} Stop_between_floors;
 
 //struct that has all the state variables. 
 //These variables should always be synced to the elevator
 //elevator struct
 typedef struct { 
     //------------main state-----------
-    primary_state elevator_state; 
+    Primary_state elevator_state; 
 
     //------------lights----------------- 
     int lights_indoor_floor[N_FLOORS + 1]; // 1 = true, 0 = false
@@ -66,7 +70,9 @@ typedef struct {
 
     //------------other-------------------
     int timer;
-
+    
+    //activated when stop is pushed between floors. 
+    Stop_between_floors stop_between_floors 
     
 
 } elevator ;
@@ -85,5 +91,7 @@ void send_elevator_data(elevator *elevator);
 //sends back instructions to the physical elevator
 
 void init_elevator(elevator *elevator);
+
+void detect_stop(elevator *elevator);
 
 void calculate_primary_elevator_state(elevator *elevator);

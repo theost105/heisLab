@@ -66,15 +66,14 @@ int main(){
         calculate_elevator_data(&elevator);
         send_elevator_data(&elevator);
 
-        
+
         //Elevator stop safeguard
         if(elevio_stopButton()){
             elevio_motorDirection(DIRN_STOP);
             break;
         }
         //sleep function. needs to sleep by some timestep to calculate the timer correctly 
-        nanosleep(&(struct timespec){0, 20*1000*1000}, NULL);
-        nanosleep(&(struct timespec){0,0,}, NULL);
+        nanosleep(&(struct timespec){0, sleep_timestep*1000*1000}, NULL);
     }
         
 
