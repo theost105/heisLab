@@ -25,37 +25,37 @@ void init_elevator(elevator *elevator){
     elevator->motor_direction = 0;
     elevator->timer = 0;
     elevator->queue_next_floor_target = -1; //set an invalid target
-    elevator->primary_state = INITIALIZING; //unsure about this.
+    elevator->elevator_state = INITIALIZING; //unsure about this.
 }
 
 
 void calculate_primary_elevator_state(elevator *elevator){
+    switch (elevator->elevator_state)
+    {
+    case WAIT:
+        if (elevator->timer * timer_sleep_timestep == timer_wait_time && 
+            elevator->sensor_obstruction == 0){
+            
+            elevator->elevator_state = IDLE;
+        } 
+        break;
 
-        //besttemer elevator_state
+    case TRANSIT:
+        if (elevator->sensor_floor_detected == elevator->queue_next_floor_target){
+            elevator->elevator_state = WAIT;
+        }
+        break;
 
-state_variables_lights_and_motor
-
--> send_motor_Data 
--> send_light_data 
-
-
-
-
-switch 
-
-switch elevator_state{
-
-    case Wait:
-    if timer == 3s and obstruction == 0:
-
-    else:
-        dooropen = true
-        timer += 20 ms
-
+    case IDLE:
+        if (elevator->queue_next_floor_target != -1){
+            elevator->elevator_state = TRANSIT;
+        }
+        break;
     
-    else:
-        last_floor
-        motor_dir = up 
-}
-
+    case INITIALIZING:
+        if (elevator->sensor_floor_detected != -1){
+            elevator->elevator_state = IDLE;
+        }
+        break;    
+    }
 }

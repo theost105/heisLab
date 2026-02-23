@@ -4,11 +4,15 @@
 #include "lights.h"
 #include "buttons_and_sensors.h"
 
+
+constexpr int timer_sleep_timestep = 20 * 1000*1000; //20ms
+constexpr int timer_wait_time = 3 * 1000 * 1000 *1000; //3s
+
 typedef enum  { // We need idle to differentiate Transit wait and idle 
     WAIT = 0, //vente med åpnedører 3 sek
     TRANSIT = 1,
     IDLE = 2, //Chille/ikke gjøre noe før bestilling
-    INITIALIZING = 3;
+    INITIALIZING = 3
 } primary_state;
 
 
