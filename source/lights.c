@@ -27,16 +27,16 @@ void send_lights_data(elevator *elevator){
     }
 
     //indoor floor button lights
-    for (int floor = 1; floor <= N_FLOORS, floor++;){
+    for (int floor = 1; floor <= N_FLOORS; floor++){
         elevio_buttonLamp(floor, BUTTON_CAB, elevator->lights_indoor_floor[floor]);        
     }
     //outdoor up button lights
-    for (int floor = 1; floor < N_FLOORS, floor++;){
+    for (int floor = 1; floor < N_FLOORS; floor++){
         elevio_buttonLamp(floor, BUTTON_HALL_UP, elevator->lights_outdoor_button[floor][0]);        
     }
 
     //outdoor down button lights
-    for (int floor = 2; floor <= N_FLOORS, floor++;){
+    for (int floor = 2; floor <= N_FLOORS; floor++){
         elevio_buttonLamp(floor, BUTTON_HALL_DOWN, elevator->lights_outdoor_button[floor][1]);        
     }
 

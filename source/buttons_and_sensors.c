@@ -5,13 +5,22 @@ void recieve_button_data(elevator *elevator){
     
     elevator->sensor_stop_button = elevio_stopButton();
 
-    /////
-    // TO DO: update these variables
-    /*
-    int sensor_indoor_order_floor_button[N_FLOORS + 1]; //sensor_indoor_order_floor_button[1] is floor 1
+    //up buttons
+    for (int floor = 1; floor < N_FLOORS; floor++){        
+        elevator->sensor_outdoor_button[floor][0] = elevio_callButton(floor, BUTTON_HALL_UP);
+    }
 
-    int sensor_outdoor_button[N_FLOORS + 1][2];
-    */
+    //down buttons
+    for (int floor = 1; floor < N_FLOORS; floor++){        
+        elevator->sensor_outdoor_button[floor][1] = elevio_callButton(floor, BUTTON_HALL_DOWN);
+    }
+
+    //order buttons
+    for (int floor = 1; floor <= N_FLOORS; floor++){        
+        elevator->sensor_indoor_order_floor_button[floor] = elevio_callButton(floor, BUTTON_CAB);
+    }
+    
+
 }
 
 void recieve_sensor_data(elevator *elevator){
