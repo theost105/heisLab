@@ -11,10 +11,56 @@ void calculate_queue_data(elevator *elevator){
     //Why are these initilized here? 
     add_queue_orders(elevator);
 
-    //check if 1st priority orders are in the queue_is_headed_up direction.
+    //Set direction based on 1st priority order
+    int has_1st_priority_order = 0;
     for (int floor = 1; floor <= N_FLOORS; floor++){
-
+        if (queue_list_1st_priority[floor] == 1){
+            has_1st_priority_order = 1;
+        }
     }
+    
+    if (has_1st_priority_order){
+        //check if 1st priority orders are in the queue_is_headed_up direction.
+        if (queue_is_headed_up){
+            for (int floor = elevator->last_floor_detected; floor <= N_FLOORS; floor++){
+                
+                if(queue_list_1st_priority[floor] == 1 ){
+                    //set next floor target on the first next floor in the up direction
+                    elevator->queue_next_floor_target = floor;
+                    break;
+                }
+                //if no target is made: then change direction to down.
+
+                queue_is_headed_up = 0;
+            }        
+        } 
+        //same, down direction
+        if (!queue_is_headed_up) { 
+            for (int floor = elevator->last_floor_detected; floor > 0; floor--){
+                if(queue_list_1st_priority[floor] == 1){
+                    elevator->queue_next_floor_target = floor;
+                    break;
+                }
+                //if no target is made: then change direction to up.
+                queue_is_headed_up = 1;
+            }
+        }
+        //check again in the up direction, in case the direction changed from down to up.
+        if (queue_is_headed_up){
+            for (int floor = elevator->last_floor_detected; floor <= N_FLOORS; floor++){
+                
+                if(queue_list_1st_priority[floor] == 1 ){
+                    //set next floor target on the first next floor in the up direction
+                    elevator->queue_next_floor_target = floor;
+                    break;
+                }
+                //if no target is made: then change direction to down.
+
+                queue_is_headed_up = 0;
+            }        
+        } 
+    }
+    
 
     //check if 1st priority orders are in the not queue_is_headed_up direction.
 
