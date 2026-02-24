@@ -30,19 +30,26 @@ void init_elevator(elevator *elevator){
 }
 
 void detect_stop(elevator *elevator){
-    if (elevator->sensor_stop_button == 1 && elevator->elevator_state != STOP){
-        if (elevator->sensor_floor_detected == -1){
-            if (elevator->motor_direction == DIRN_UP){
+    if (elevator->elevator_state != INITIALIZING){
+
+        if (elevator->sensor_stop_button == 1 && elevator->elevator_state != STOP){
+            switch (elevator->motor_direction)
+            {
+            case DIRN_UP:
                 elevator->stop_between_floors = OVER;
-            }
-            if (elevator->motor_direction == DIRN_DOWN){
+                break;
+                
+            case DIRN_DOWN:
                 elevator->stop_between_floors = UNDER;
-            }
-        }else{
-            elevator->stop_between_floors = NOT_DETECTED;
-        }
+                break;
+                
+            case DIRN_STOP:
+                elevator->stop_between_floors = NOT_DETECTED;
         
-        elevator->elevator_state = STOP;
+            }
+            
+            elevator->elevator_state = STOP;
+        }        
     }
 }
 
