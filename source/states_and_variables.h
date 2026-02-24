@@ -1,7 +1,9 @@
-
+#pragma once
 #include "driver/elevio.h"
 #include "lights.h"
 #include "buttons_and_sensors.h"
+#include "motor.h"
+#include "queue.h"
 
 
 
@@ -26,7 +28,7 @@ typedef enum { //To determin where the elevator is incase of emergency stop
 //struct that has all the state variables. 
 //These variables should always be synced to the elevator
 //elevator struct
-typedef struct { 
+typedef struct elevator { 
     //------------main state-----------
     Primary_state elevator_state; 
 
@@ -75,7 +77,7 @@ typedef struct {
     int timer;
     
     //activated when stop is pushed between floors. 
-    Stop_between_floors stop_between_floors 
+    Stop_between_floors stop_between_floors;
     
 
 } elevator ;

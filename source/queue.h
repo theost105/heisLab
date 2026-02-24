@@ -1,5 +1,8 @@
 #pragma once
 #include "states_and_variables.h"
+#include <stdio.h>
+
+typedef struct elevator elevator;
 
 void calculate_queue_data(elevator *elevator);
 

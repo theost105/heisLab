@@ -8,7 +8,7 @@ void recieve_elevator_data(elevator *elevator) {
 
 void calculate_elevator_data(elevator *elevator){
     calculate_queue_data(elevator);
-    calculate_primary_state(elevator);
+    calculate_primary_elevator_state(elevator);
     //maybe we need to add a calculate primary_state data. 
     //Or maybe that variable is directly calculated in calculate_motor_data(..)
     calculate_motor_data(elevator);
