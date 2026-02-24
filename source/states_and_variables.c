@@ -69,7 +69,7 @@ void calculate_primary_elevator_state(elevator *elevator){
         break;
 
     case TRANSIT:
-        if (elevator->sensor_floor_detected == elevator->queue_next_floor_target && elevator->stop_between_floors == NOT_DETECTED){
+        if (elevator->sensor_floor_detected == elevator->queue_next_floor_target){
             elevator->elevator_state = WAIT;
         }
         break;
