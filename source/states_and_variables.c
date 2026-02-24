@@ -58,9 +58,7 @@ void calculate_primary_elevator_state(elevator *elevator){
     switch (elevator->elevator_state)
     {
     case WAIT:
-        elevator->stop_between_floors = NOT_DETECTED;
         if (elevator->timer >= wait_time && elevator->sensor_obstruction == 0){
-
             elevator->timer = 0;
             elevator->elevator_state = IDLE;
         }else{
@@ -70,7 +68,9 @@ void calculate_primary_elevator_state(elevator *elevator){
 
     case TRANSIT:
         if (elevator->sensor_floor_detected == elevator->queue_next_floor_target){
+            elevator->stop_between_floors = NOT_DETECTED;
             elevator->elevator_state = WAIT;
+
         }
         break;
 
