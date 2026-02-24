@@ -1,5 +1,10 @@
 #include "states_and_variables.h"
 
+//Time constants:
+const unsigned sleep_timestep = 20 ; //20ms ----NEED TO MULTIPLY BY 10^6 in nano sleep----
+const unsigned int wait_time = 3 * 1000 ; //3s 
+
+
 
 void recieve_elevator_data(elevator *elevator) {
     recieve_button_data(elevator);

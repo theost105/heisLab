@@ -7,8 +7,8 @@
 
 
 
-const unsigned sleep_timestep = 20 ; //20ms ----NEED TO MULTIPLY BY 10^6 in nano sleep----
-const unsigned int wait_time = 3 * 1000 ; //3s 
+extern const unsigned sleep_timestep; //20ms ----NEED TO MULTIPLY BY 10^6 in nano sleep----
+extern const unsigned int wait_time; //3s 
 //This is to avoid integer overflow
 
 typedef enum  { // We need idle to differentiate Transit wait and idle 

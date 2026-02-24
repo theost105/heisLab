@@ -7,7 +7,7 @@ typedef struct elevator elevator;
 void calculate_queue_data(elevator *elevator);
 
 void add_queue_orders(elevator *elevator);
+void calculate_direction_and_next_floor_target(elevator *elevator);
 void clear_finished_queue_orders(elevator *elevator);
 
-void calculate_direction_and_next_floor_target(elevator *elevator);
-
+void init_queue(elevator *elevator);
