@@ -8,7 +8,7 @@ void calculate_queue_data(elevator *elevator){
     int queue_list_2nd_priority_up[N_FLOORS+1]; //last element is invalid
     int queue_list_2nd_priority_down[N_FLOORS+1];
     int queue_is_headed_up;
-
+    //Why are these initilized here? 
     add_queue_orders(elevator);
 
     //check if 1st priority orders are in the queue_is_headed_up direction.

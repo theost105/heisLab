@@ -31,6 +31,12 @@ void calculate_lights_data(elevator *elevator){
     
     //queue light logic. Order buttons etc:
 
+    // elevator->queue_list_1st_priority = elevator->lights_indoor_floor;
+    for (int floor = 1; floor <= N_FLOORS; floor++){
+        elevator->lights_indoor_floor[floor] = elevator->queue_list_1st_priority[floor];
+        elevator->lights_outdoor_button[floor][0] = elevator->queue_list_2nd_priority[floor][0];
+        elevator->lights_outdoor_button[floor][1] = elevator->queue_list_2nd_priority[floor][1];
+    }
 
 }
 
@@ -60,7 +66,6 @@ void send_lights_data(elevator *elevator){
     for (int floor = 1; floor < N_FLOORS; floor++){
         elevio_buttonLamp(floor, BUTTON_HALL_UP, elevator->lights_outdoor_button[floor][0]);        
     }
-
     //outdoor down button lights
     for (int floor = 2; floor <= N_FLOORS; floor++){
         elevio_buttonLamp(floor, BUTTON_HALL_DOWN, elevator->lights_outdoor_button[floor][1]);        
