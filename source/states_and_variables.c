@@ -13,6 +13,7 @@ void calculate_elevator_data(elevator *elevator){
     //Or maybe that variable is directly calculated in calculate_motor_data(..)
     calculate_motor_data(elevator);
     calculate_lights_data(elevator);
+
 }
 
 void send_elevator_data(elevator *elevator){
@@ -27,6 +28,8 @@ void init_elevator(elevator *elevator){
     elevator->queue_next_floor_target = -1; //set an invalid target
     elevator->elevator_state = INITIALIZING; 
     elevator->stop_between_floors = NOT_DETECTED;
+    elevator->queue_is_headed_up = 1,
+    init_queue(elevator); 
 }
 
 void detect_stop(elevator *elevator){

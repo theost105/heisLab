@@ -67,6 +67,9 @@ typedef struct {
 
     //-----------queue states----------
     int queue_next_floor_target;
+    int queue_list_1st_priority[N_FLOORS+1];
+    int queue_list_2nd_priority[N_FLOORS+1][2]; // floor, (up, down)
+    int queue_is_headed_up;
 
     //------------other-------------------
     int timer;
