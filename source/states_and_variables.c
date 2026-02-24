@@ -58,6 +58,7 @@ void calculate_primary_elevator_state(elevator *elevator){
     switch (elevator->elevator_state)
     {
     case WAIT:
+        elevator->stop_between_floors = NOT_DETECTED;
         if (elevator->timer >= wait_time && elevator->sensor_obstruction == 0){
 
             elevator->timer = 0;

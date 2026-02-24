@@ -10,7 +10,7 @@ void calculate_motor_data(elevator *elevator){
     case TRANSIT:
 
         //EDGE CASE HANDELING. If an elevator is emergency stopped over/under the floor you want to go to
-        if (elevator->queue_next_floor_target == elevator->queue_next_floor_target){
+        if (elevator->queue_next_floor_target == elevator->last_floor_detected){
             switch (elevator->stop_between_floors)
             {
             case UNDER:
