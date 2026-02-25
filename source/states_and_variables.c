@@ -33,7 +33,8 @@ void init_elevator(elevator *elevator){
     elevator->queue_next_floor_target = -1; //set an invalid target
     elevator->elevator_state = INITIALIZING; 
     elevator->stop_between_floors = NOT_DETECTED;
-    elevator->queue_is_headed_up = 1,
+    elevator->queue_is_headed_up = 1;
+    elevator->last_floor_detected = 1;
     init_queue(elevator); 
 }
 
@@ -74,7 +75,7 @@ void calculate_primary_elevator_state(elevator *elevator){
         }
         break;
 
-    case TRANSIT: //shift to account for index shift in driver and elevator struct
+    case TRANSIT: 
         if (elevator->sensor_floor_detected == elevator->queue_next_floor_target){
             elevator->stop_between_floors = NOT_DETECTED;
             elevator->elevator_state = WAIT;

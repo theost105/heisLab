@@ -49,8 +49,9 @@ void send_lights_data(elevator *elevator){
     elevio_doorOpenLamp(elevator->lights_indoor_door_open);
     
     
-    
-    if (elevator->last_floor_detected != -1){
+    //Not needed. last_florr_detected is always a valid floor except at initilizing
+    //can change last_floor_detected = 1 so it always valid even in intilizing
+    if (elevator->last_floor_detected != -1){ 
         /// lights_outdoor_floor is not in use. Test if this works.
         // TEST: Will only one outdoor floot indicator light be active at once?
         elevio_floorIndicator(elevator->last_floor_detected -1); 
@@ -60,15 +61,15 @@ void send_lights_data(elevator *elevator){
 
     //indoor floor button lights
     for (int floor = 1; floor <= N_FLOORS; floor++){
-        elevio_buttonLamp(floor, BUTTON_CAB, elevator->lights_indoor_floor[floor+1]);        
+        elevio_buttonLamp(floor - 1 , BUTTON_CAB, elevator->lights_indoor_floor[floor]);        
     }
     //outdoor up button lights
-    for (int floor = 0; floor <= N_FLOORS; floor++){
-        elevio_buttonLamp(floor, BUTTON_HALL_UP, elevator->lights_outdoor_button[floor+1][0]);        
+    for (int floor = 1; floor < N_FLOORS; floor++){
+        elevio_buttonLamp(floor - 1, BUTTON_HALL_UP, elevator->lights_outdoor_button[floor][0]);        
     }
     //outdoor down button lights
-    for (int floor = 1; floor < N_FLOORS; floor++){
-        elevio_buttonLamp(floor, BUTTON_HALL_DOWN, elevator->lights_outdoor_button[floor+1][1]);        
+    for (int floor = 2; floor <= N_FLOORS; floor++){
+        elevio_buttonLamp(floor - 1, BUTTON_HALL_DOWN, elevator->lights_outdoor_button[floor][1]);        
     }
 
     

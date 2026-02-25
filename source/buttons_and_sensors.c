@@ -28,10 +28,13 @@ void recieve_sensor_data(elevator *elevator){
     
     int detected_floor = elevio_floorSensor();
 
-    elevator->sensor_floor_detected = detected_floor + 1;
-
-    if (detected_floor != -1){//shift to account for index diffrences in elevator and drivers
-        elevator->last_floor_detected = detected_floor;
+    //shift to account for index diffrences in elevator and drivers
+    //keep -1 as not valid value for sensor_floor_detected
+    if (detected_floor != -1){
+        elevator->sensor_floor_detected = detected_floor + 1;
+        elevator->last_floor_detected = detected_floor + 1 ;
+    }else {
+        elevator->sensor_floor_detected = -1;
     }
     
     
