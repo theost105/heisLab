@@ -63,15 +63,16 @@ int main(){
 
     while(1){
         recieve_elevator_data(&elevator);
+        detect_stop(&elevator);
         calculate_elevator_data(&elevator);
         send_elevator_data(&elevator);
         // printf(elevator.queue_next_floor_target);
 
         //Elevator stop safeguard
-        if(elevio_stopButton()){
-            elevio_motorDirection(DIRN_STOP);
-            break;
-        }
+        // if(elevio_stopButton()){
+        //     elevio_motorDirection(DIRN_STOP);
+        //     break;
+        // }
         //sleep function. needs to sleep by some timestep to calculate the timer correctly 
         nanosleep(&(struct timespec){0, sleep_timestep*1000*1000}, NULL);
     }
