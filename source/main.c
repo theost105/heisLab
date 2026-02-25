@@ -65,7 +65,7 @@ int main(){
         recieve_elevator_data(&elevator);
         calculate_elevator_data(&elevator);
         send_elevator_data(&elevator);
-
+        // printf(elevator.queue_next_floor_target);
 
         //Elevator stop safeguard
         if(elevio_stopButton()){

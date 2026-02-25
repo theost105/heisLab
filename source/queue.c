@@ -188,7 +188,7 @@ void calculate_direction_and_next_floor_target(elevator *elevator) {
 void clear_finished_queue_orders(elevator *elevator){
     
     //clear orders only in WAIT
-    if(elevator->elevator_state == WAIT && elevator->sensor_floor_detected != -1){
+    if(elevator->elevator_state == WAIT){
             elevator->queue_list_1st_priority[elevator->sensor_floor_detected] = 0;
             elevator->queue_list_2nd_priority[elevator->sensor_floor_detected][0] = 0;
             elevator->queue_list_2nd_priority[elevator->sensor_floor_detected][1] = 0;

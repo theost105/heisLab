@@ -7,7 +7,7 @@
 
 
 
-extern const unsigned sleep_timestep; //20ms ----NEED TO MULTIPLY BY 10^6 in nano sleep----
+extern const unsigned int sleep_timestep; //20ms ----NEED TO MULTIPLY BY 10^6 in nano sleep----
 extern const unsigned int wait_time; //3s 
 //This is to avoid integer overflow
 

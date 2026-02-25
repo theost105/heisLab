@@ -1,7 +1,7 @@
 #include "states_and_variables.h"
 
 //Time constants:
-const unsigned sleep_timestep = 20 ; //20ms ----NEED TO MULTIPLY BY 10^6 in nano sleep----
+const unsigned int sleep_timestep = 20 ; //20ms ----NEED TO MULTIPLY BY 10^6 in nano sleep----
 const unsigned int wait_time = 3 * 1000 ; //3s 
 
 
@@ -74,11 +74,10 @@ void calculate_primary_elevator_state(elevator *elevator){
         }
         break;
 
-    case TRANSIT:
+    case TRANSIT: //shift to account for index shift in driver and elevator struct
         if (elevator->sensor_floor_detected == elevator->queue_next_floor_target){
             elevator->stop_between_floors = NOT_DETECTED;
             elevator->elevator_state = WAIT;
-
         }
         break;
 
