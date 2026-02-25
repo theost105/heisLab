@@ -11,7 +11,7 @@ void recieve_button_data(elevator *elevator){
     }
 
     //down buttons
-    for (int floor = 1; floor < N_FLOORS; floor++){        
+    for (int floor = 1; floor <= N_FLOORS; floor++){        
         elevator->sensor_outdoor_button[floor][1] = elevio_callButton(floor-1, BUTTON_HALL_DOWN);
     }
 

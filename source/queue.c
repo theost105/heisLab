@@ -41,6 +41,7 @@ void add_queue_orders(elevator *elevator) {
     for (int floor = 2; floor <= N_FLOORS; floor++){
         if (elevator->sensor_outdoor_button[floor][1] == 1){
             elevator->queue_list_2nd_priority[floor][1] = 1;
+            
         }    
     }
 }
@@ -57,63 +58,95 @@ void calculate_direction_and_next_floor_target(elevator *elevator) {
     if (has_1st_priority_order){
         //check if 1st priority orders are in the queue_is_headed_up direction.
         if (elevator->queue_is_headed_up){
+
+            int target_was_made = 0;
             for (int floor = elevator->last_floor_detected; floor <= N_FLOORS; floor++){
                 
                 if(elevator->queue_list_1st_priority[floor] == 1 ){
                     //set next floor target on the first next floor in the up direction
                     elevator->queue_next_floor_target = floor;
+                    target_was_made = 1;
                     break;
                 }
-                //if no target is made: then change direction to down.
+                
+                
+            }   
+            //if no target is made: then change direction to down.
+            if (!target_was_made){
                 elevator->queue_is_headed_up = 0;
-            }        
+            }     
         } 
         //same, down direction
         if (!elevator->queue_is_headed_up) { 
+            int target_was_made = 0;
+
             for (int floor = elevator->last_floor_detected; floor > 0; floor--){
                 if(elevator->queue_list_1st_priority[floor] == 1){
                     elevator->queue_next_floor_target = floor;
+                    target_was_made = 1;
                     break;
                 }
-                //if no target is made: then change direction to up.
-                elevator->queue_is_headed_up = 1;
+                
             }
+
+            //if no target is made: then change direction to up.
+            if (!target_was_made){
+                elevator->queue_is_headed_up = 1;
+            } 
         }
         //check again in the up direction, in case the direction changed from down to up.
         if (elevator->queue_is_headed_up){
+            int target_was_made = 0;
+
             for (int floor = elevator->last_floor_detected; floor <= N_FLOORS; floor++){
                 
                 if(elevator->queue_list_1st_priority[floor] == 1 ){
                     //set next floor target on the first next floor in the up direction
                     elevator->queue_next_floor_target = floor;
+                    target_was_made = 1;
                     break;
                 }
-                //if no target is made: then change direction to down.
-
+            }
+            //if no target is made: then change direction to down. but something was wrong
+            if (!target_was_made){
                 elevator->queue_is_headed_up = 0;
-            }        
+                printf("A 1st priority target was not hit when it should have been");
+            }     
         }  
     }
+
+
     //check if there are any 2nd priority orders in between last_floor_detected and queue_next_floor_target. Set the nearest one as target
+    
     int has_2nd_priority_order = 0;
     for (int floor = 1; floor <= N_FLOORS; floor++){
         if (elevator->queue_list_2nd_priority[floor][0] == 1 || elevator->queue_list_2nd_priority[floor][1] == 1){
             has_2nd_priority_order = 1;
         }
     }
+    printf("has 1st priority: %d, has 2nd priority: %d\n", has_1st_priority_order, has_2nd_priority_order);
+    
     if (has_2nd_priority_order && has_1st_priority_order){
-
+        printf("both");
+        
         //check if orders are in between in the direction up
         if (elevator->queue_is_headed_up == 1){
+            printf("is headed up");
+            printf("next floor target: %d\n", elevator->queue_next_floor_target);
+            printf("Last_floor_detected: %d\n", elevator->last_floor_detected);
+                    
             for (int floor = elevator->last_floor_detected; floor < elevator->queue_next_floor_target; floor++){
+                printf("elevator->queue_list_2nd_priority[floor][0]: %d\n ", elevator->queue_list_2nd_priority[floor][0]);
                 if (elevator->queue_list_2nd_priority[floor][0] == 1){
                     elevator->queue_next_floor_target = floor;
+                    printf("prøvde å legge til 2nd priority order i mellom 1st priority target \n");
                     break;
                 }
             }
         }
         //check if orders are in between in the direction down
         if (elevator->queue_is_headed_up == 0){
+            printf("is headed down");
             for (int floor = elevator->last_floor_detected; floor > elevator->queue_next_floor_target; floor--){
                 if (elevator->queue_list_2nd_priority[floor][1] == 1){
                     elevator->queue_next_floor_target = floor;
@@ -189,9 +222,15 @@ void clear_finished_queue_orders(elevator *elevator){
     
     //clear orders only in WAIT
     if(elevator->elevator_state == WAIT){
-            elevator->queue_list_1st_priority[elevator->sensor_floor_detected] = 0;
-            elevator->queue_list_2nd_priority[elevator->sensor_floor_detected][0] = 0;
-            elevator->queue_list_2nd_priority[elevator->sensor_floor_detected][1] = 0;
+        elevator->queue_list_1st_priority[elevator->sensor_floor_detected] = 0;
+        elevator->queue_list_2nd_priority[elevator->sensor_floor_detected][0] = 0;
+        elevator->queue_list_2nd_priority[elevator->sensor_floor_detected][1] = 0;
+    }
+
+    if(elevator->elevator_state == STOP){
+        elevator->queue_list_1st_priority[elevator->sensor_floor_detected] = 0;
+        elevator->queue_list_2nd_priority[elevator->sensor_floor_detected][0] = 0;
+        elevator->queue_list_2nd_priority[elevator->sensor_floor_detected][1] = 0;
     }
 
 }
