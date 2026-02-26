@@ -119,34 +119,43 @@ void calculate_direction_and_next_floor_target(elevator *elevator) {
     //check if there are any 2nd priority orders in between last_floor_detected and queue_next_floor_target. Set the nearest one as target
     
     int has_2nd_priority_order = 0;
+    int is_only_one_2nd_priority_order = 0;
+    int count_of_2nd_priority_orders = 0;
     for (int floor = 1; floor <= N_FLOORS; floor++){
         if (elevator->queue_list_2nd_priority[floor][0] == 1 || elevator->queue_list_2nd_priority[floor][1] == 1){
             has_2nd_priority_order = 1;
+            count_of_2nd_priority_orders += 1;
         }
     }
-    printf("has 1st priority: %d, has 2nd priority: %d\n", has_1st_priority_order, has_2nd_priority_order);
+    if (count_of_2nd_priority_orders == 1){
+        is_only_one_2nd_priority_order = 1;
+    }    
+
+    //printf("has 1st priority: %d, has 2nd priority: %d\n", has_1st_priority_order, has_2nd_priority_order);
     
+
+
     if (has_2nd_priority_order && has_1st_priority_order){
-        printf("both");
+        //printf("both");
         
         //check if orders are in between in the direction up
         if (elevator->queue_is_headed_up == 1){
-            printf("is headed up");
-            printf("next floor target: %d\n", elevator->queue_next_floor_target);
-            printf("Last_floor_detected: %d\n", elevator->last_floor_detected);
+            //printf("is headed up");
+            //printf("next floor target: %d\n", elevator->queue_next_floor_target);
+            //printf("Last_floor_detected: %d\n", elevator->last_floor_detected);
                     
             for (int floor = elevator->last_floor_detected; floor < elevator->queue_next_floor_target; floor++){
-                printf("elevator->queue_list_2nd_priority[floor][0]: %d\n ", elevator->queue_list_2nd_priority[floor][0]);
+                //printf("elevator->queue_list_2nd_priority[floor][0]: %d\n ", elevator->queue_list_2nd_priority[floor][0]);
                 if (elevator->queue_list_2nd_priority[floor][0] == 1){
                     elevator->queue_next_floor_target = floor;
-                    printf("prøvde å legge til 2nd priority order i mellom 1st priority target \n");
+                    //printf("prøvde å legge til 2nd priority order i mellom 1st priority target \n");
                     break;
                 }
             }
         }
         //check if orders are in between in the direction down
         if (elevator->queue_is_headed_up == 0){
-            printf("is headed down");
+            //printf("is headed down");
             for (int floor = elevator->last_floor_detected; floor > elevator->queue_next_floor_target; floor--){
                 if (elevator->queue_list_2nd_priority[floor][1] == 1){
                     elevator->queue_next_floor_target = floor;
@@ -156,25 +165,77 @@ void calculate_direction_and_next_floor_target(elevator *elevator) {
         }
     }
 
+    
+    //EDGE CASE is_only_one_2nd_priority_order
+    //dersom det er kun en 2nd priority order, skal den bestemme elevator->queue_is_headed_up
+    if (has_2nd_priority_order && !has_1st_priority_order && is_only_one_2nd_priority_order){
+        
+        // this order should determin queue_is_headed_up direction
+        //if target is upwards
+        for (int floor = 1; floor <= N_FLOORS; floor++){
+            if (elevator->last_floor_detected < floor && (elevator->queue_list_2nd_priority[floor][0] == 1 || elevator->queue_list_2nd_priority[floor][1] == 1)){
+                elevator->queue_is_headed_up = 1;
+            }
+        }
+        //if target is downwards
+        for (int floor = 1; floor <= N_FLOORS; floor++){
+            if (elevator->last_floor_detected > floor && (elevator->queue_list_2nd_priority[floor][0] == 1 || elevator->queue_list_2nd_priority[floor][1] == 1)){
+                elevator->queue_is_headed_up = 0;
+            }
+        }
+    }
+
+    int setting_choose_furthest_2nd_priority_order_in_queue_is_headed_up_direction = 1;
+    // ^ this setting is only used if only 2nd priority orders exist.
+    // ^ ønsker at prioriterer den som er lengst unna i retningen. Feks det er 2 opp, så skal den velge nederste opp som target.
+
     if (has_2nd_priority_order && !has_1st_priority_order){
+        
+        
         //choose the nearest order in the queue_is_headed_up direction.
+
         int did_detect_order = 0;
+
         // for loop if up direction
         if(elevator->queue_is_headed_up){
             for (int floor = elevator->last_floor_detected; floor <= N_FLOORS; floor++){
                 if (elevator->queue_list_2nd_priority[floor][0] || elevator->queue_list_2nd_priority[floor][1]){
                     elevator->queue_next_floor_target = floor;
                     did_detect_order = 1;
+
+                    //hvis downknapp motsatt av oppretning, velg lengst unna. 
+                    if (setting_choose_furthest_2nd_priority_order_in_queue_is_headed_up_direction){
+                        if (elevator->queue_list_2nd_priority[floor][0]){
+                            //break if button is up
+                            break;
+                        }
+                    } else {
+                        break;
+                    } 
+                    
+                    
                 }
                 
             }
         }
+
         // for loop if down direction
         if(! elevator->queue_is_headed_up){
             for (int floor = elevator->last_floor_detected; floor >= 1; floor--){
                 if (elevator->queue_list_2nd_priority[floor][0] || elevator->queue_list_2nd_priority[floor][1]){
                     elevator->queue_next_floor_target = floor;
                     did_detect_order = 1;
+
+                    //hvis oppknapp motsatt av nedretning, velg lengst unna. 
+                    if (setting_choose_furthest_2nd_priority_order_in_queue_is_headed_up_direction){
+                        if (elevator->queue_list_2nd_priority[floor][1]){
+                            //break if button is down
+                            break;
+                        }
+                    } else {
+                        break;
+                    } 
+                    
                 }
             }
         }
@@ -185,22 +246,48 @@ void calculate_direction_and_next_floor_target(elevator *elevator) {
             elevator->queue_is_headed_up = ! elevator->queue_is_headed_up;
 
 
-            //--------------check again.---------
+            //--------------check again. (exactly the same code as over ^)---------
+            // for loop if up direction
             if(elevator->queue_is_headed_up){
                 for (int floor = elevator->last_floor_detected; floor <= N_FLOORS; floor++){
                     if (elevator->queue_list_2nd_priority[floor][0] || elevator->queue_list_2nd_priority[floor][1]){
-                    elevator->queue_next_floor_target = floor;
-                    did_detect_order = 1;
-                }
+                        elevator->queue_next_floor_target = floor;
+                        did_detect_order = 1;
+
+                        //hvis downknapp motsatt av oppretning, velg lengst unna. 
+                        if (setting_choose_furthest_2nd_priority_order_in_queue_is_headed_up_direction){
+                            if (elevator->queue_list_2nd_priority[floor][0]){
+                                //break if button is up
+                                break;
+                            }
+                        } else {
+                            break;
+                        } 
+                        
+                        
+                    }
+                    
                 }
             }
+
             // for loop if down direction
             if(! elevator->queue_is_headed_up){
                 for (int floor = elevator->last_floor_detected; floor >= 1; floor--){
                     if (elevator->queue_list_2nd_priority[floor][0] || elevator->queue_list_2nd_priority[floor][1]){
-                    elevator->queue_next_floor_target = floor;
-                    did_detect_order = 1;
-                }
+                        elevator->queue_next_floor_target = floor;
+                        did_detect_order = 1;
+
+                        //hvis oppknapp motsatt av nedretning, velg lengst unna. 
+                        if (setting_choose_furthest_2nd_priority_order_in_queue_is_headed_up_direction){
+                            if (elevator->queue_list_2nd_priority[floor][1]){
+                                //break if button is down
+                                break;
+                            }
+                        } else {
+                            break;
+                        } 
+                        
+                    }
                 }
             }
             //DEBUG if failed
@@ -211,12 +298,24 @@ void calculate_direction_and_next_floor_target(elevator *elevator) {
         }
     }
 
+    //når man setter nye targets med 2nd priority, så må man også oppdatere retning.
+    //alltid oppdater direction i forhold til kalkulert target
+    if (elevator->queue_next_floor_target < elevator->last_floor_detected){
+        elevator->queue_is_headed_up = 0;
+    }
+    if (elevator->queue_next_floor_target > elevator->last_floor_detected){
+        elevator->queue_is_headed_up = 1;
+    }
+    
+
     if (!has_1st_priority_order && !has_2nd_priority_order){
         elevator->queue_next_floor_target = -1; // set an invalid target
     }
 
     
 }
+
+
 
 void clear_finished_queue_orders(elevator *elevator){
     
