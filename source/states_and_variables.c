@@ -1,8 +1,8 @@
 #include "states_and_variables.h"
 
 //Time constants:
-const unsigned int sleep_timestep = 20 ; //20ms ----NEED TO MULTIPLY BY 10^6 in nano sleep----
-const unsigned int wait_time = 1 * 1000 ; //1s 
+const unsigned int sleep_timestep = 50 ; //50ms ----NEED TO MULTIPLY BY 10^6 in nano sleep----
+const unsigned int wait_time = 3 * 1000 ; //3s 
 
 
 
@@ -40,8 +40,8 @@ void init_elevator(elevator *elevator){
 
 void detect_stop(elevator *elevator){
     if (elevator->elevator_state != INITIALIZING){
-
-        if (elevator->sensor_stop_button == 1 && elevator->elevator_state != STOP){
+        
+        if (elevator->sensor_stop_button == 1 && elevator->stop_between_floors == NOT_DETECTED){
             switch (elevator->motor_direction)
             {
             case DIRN_UP:
