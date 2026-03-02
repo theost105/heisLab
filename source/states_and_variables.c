@@ -40,9 +40,9 @@ void init_elevator(elevator *elevator){
 
 void detect_stop(elevator *elevator){
     if (elevator->elevator_state != INITIALIZING){
-        
+        elevator->elevator_state = STOP;
         if (elevator->sensor_stop_button == 1 && elevator->elevator_state != STOP){
-            if (elevator->elevator_state == NOT_DETECTED){
+            if (elevator->stop_between_floors == NOT_DETECTED){
                 switch (elevator->motor_direction)
                 {
                 case DIRN_UP:
@@ -58,9 +58,6 @@ void detect_stop(elevator *elevator){
             
                 }
             }
-            
-            
-            elevator->elevator_state = STOP;
         }        
     }
 }
