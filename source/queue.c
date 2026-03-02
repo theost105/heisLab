@@ -327,9 +327,11 @@ void clear_finished_queue_orders(elevator *elevator){
     }
 
     if(elevator->elevator_state == STOP){
-        elevator->queue_list_1st_priority[elevator->sensor_floor_detected] = 0;
-        elevator->queue_list_2nd_priority[elevator->sensor_floor_detected][0] = 0;
-        elevator->queue_list_2nd_priority[elevator->sensor_floor_detected][1] = 0;
+        for (int floor = 1; floor <= N_FLOORS; floor++){
+        elevator->queue_list_1st_priority[floor] = 0;
+        elevator->queue_list_2nd_priority[floor][0] = 0;
+        elevator->queue_list_2nd_priority[floor][1] = 0;
+        }
     }
 
 }

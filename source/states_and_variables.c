@@ -2,7 +2,7 @@
 
 //Time constants:
 const unsigned int sleep_timestep = 20 ; //20ms ----NEED TO MULTIPLY BY 10^6 in nano sleep----
-const unsigned int wait_time = 3 * 1000 ; //3s 
+const unsigned int wait_time = 1 * 1000 ; //1s 
 
 
 
