@@ -4,8 +4,9 @@
 void calculate_lights_data(elevator *elevator){
     //Defaults:
     elevator->lights_indoor_door_open = 0;
-    elevator->lights_stop = 0;
+    elevator->lights_stop= elevator->sensor_stop_button;
     
+
     switch (elevator->elevator_state)
     {
     case WAIT:
@@ -25,7 +26,6 @@ void calculate_lights_data(elevator *elevator){
         break;
     
     case STOP:
-        elevator->lights_stop = 1;
         break;
     }
     
