@@ -67,15 +67,17 @@ void calculate_primary_elevator_state(elevator *elevator){
     switch (elevator->elevator_state)
     {
     case WAIT:
-        if (elevator->sensor_obstruction == 0){
+
+        if(elevator->sensor_obstruction == 1){
+            elevator->timer = 0;
+        }else{
             if (elevator->timer >= wait_time){
             elevator->timer = 0;
             elevator->elevator_state = IDLE;
             }else{
             elevator->timer += sleep_timestep;
+            }
         }
-        }
-        
         break;
 
     case TRANSIT: 
